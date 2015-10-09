@@ -64,6 +64,7 @@ public class AggregatorParsers {
             // NORELEASE remove this check when agg refactoring complete
             if (factoryPrototype != null) {
                 namedWriteableRegistry.registerPrototype(AggregatorFactory.class, factoryPrototype);
+            }
         }
         this.aggParsers = unmodifiableMap(aggParsersBuilder);
         Map<String, PipelineAggregator.Parser> pipelineAggregatorParsersBuilder = new HashMap<>(pipelineAggregatorParsers.size());
@@ -73,6 +74,7 @@ public class AggregatorParsers {
             // NORELEASE remove this check when agg refactoring complete
             if (factoryPrototype != null) {
                 namedWriteableRegistry.registerPrototype(PipelineAggregatorFactory.class, factoryPrototype);
+            }
         }
         this.pipelineAggregatorParsers = unmodifiableMap(pipelineAggregatorParsersBuilder);
     }
