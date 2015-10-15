@@ -108,8 +108,16 @@ public abstract class ValuesSourceAggregatorFactory<VS extends ValuesSource> ext
         this.field = field;
     }
 
+    public String field() {
+        return field;
+    }
+
     public void script(Script script) {
         this.script = script;
+    }
+
+    public Script script() {
+        return script;
     }
 
     public void valueType(ValueType valueType) {
@@ -120,12 +128,24 @@ public abstract class ValuesSourceAggregatorFactory<VS extends ValuesSource> ext
         this.format = format;
     }
 
+    public String format() {
+        return format;
+    }
+
     public void missing(Object missing) {
         this.missing = missing;
     }
 
+    public Object missing() {
+        return missing;
+    }
+
     public void timeZone(DateTimeZone timeZone) {
         this.timeZone = timeZone;
+    }
+
+    public DateTimeZone timeZone() {
+        return timeZone;
     }
 
     @Override
@@ -299,6 +319,11 @@ public abstract class ValuesSourceAggregatorFactory<VS extends ValuesSource> ext
         }
         out.writeOptionalString(format);
         out.writeGenericValue(missing);
+        boolean hasTimeZone = timeZone != null;
+        out.writeBoolean(hasTimeZone);
+        if (hasTimeZone) {
+            out.writeString(timeZone.getID());
+        }
     }
 
     // NORELEASE make this abstract when agg refactor complete
@@ -328,6 +353,9 @@ public abstract class ValuesSourceAggregatorFactory<VS extends ValuesSource> ext
         }
         factory.format = in.readOptionalString();
         factory.missing = in.readGenericValue();
+        if (in.readBoolean()) {
+            factory.timeZone = DateTimeZone.forID(in.readString());
+        }
         return factory;
     }
 
@@ -348,6 +376,12 @@ public abstract class ValuesSourceAggregatorFactory<VS extends ValuesSource> ext
         }
         if (missing != null) {
             builder.field("missing", missing);
+        }
+        if (format != null) {
+            builder.field("format", format);
+        }
+        if (timeZone != null) {
+            builder.field("timeZone", timeZone);
         }
         doXContentBody(builder, params);
         builder.endObject();
