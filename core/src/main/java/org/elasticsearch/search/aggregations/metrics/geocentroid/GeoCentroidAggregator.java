@@ -20,7 +20,6 @@
 package org.elasticsearch.search.aggregations.metrics.geocentroid;
 
 import org.apache.lucene.index.LeafReaderContext;
-import org.apache.lucene.util.XGeoHashUtils;
 import org.apache.lucene.util.XGeoUtils;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.elasticsearch.common.lease.Releasables;
@@ -37,7 +36,7 @@ import org.elasticsearch.search.aggregations.pipeline.PipelineAggregator;
 import org.elasticsearch.search.aggregations.support.AggregationContext;
 import org.elasticsearch.search.aggregations.support.ValuesSource;
 import org.elasticsearch.search.aggregations.support.ValuesSourceAggregatorFactory;
-import org.elasticsearch.search.aggregations.support.ValuesSourceConfig;
+import org.elasticsearch.search.aggregations.support.ValuesSourceParser;
 
 import java.io.IOException;
 import java.util.List;
@@ -124,7 +123,7 @@ public final class GeoCentroidAggregator extends MetricsAggregator {
     }
 
     public static class Factory extends ValuesSourceAggregatorFactory.LeafOnly<ValuesSource.GeoPoint> {
-        protected Factory(String name, ValuesSourceConfig<ValuesSource.GeoPoint> config) {
+        protected Factory(String name, ValuesSourceParser.Input<ValuesSource.GeoPoint> config) {
             super(name, InternalGeoBounds.TYPE.name(), config);
         }
 
